@@ -1,6 +1,7 @@
 import argparse
 import imutils
 import cv2
+import numpy as np
 
 # ap = argparse.ArgumentParser()
 # ap.add_argument("-i","--image", required=True,

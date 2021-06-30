@@ -50,4 +50,6 @@ for c in cnts:
     # show the output image
     cv2.imshow("Image", masked)
     cv2.waitKey(0)
+    
+cv2.destroyAllWindows()
 

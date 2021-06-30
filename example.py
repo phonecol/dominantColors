@@ -4,7 +4,7 @@ import cv2
 
 #open image
 # img = 'colors.jpeg'
-img = '5.jpg'
+img = '6.jpg'
 img = cv2.imread(img)
 
 #convert to RGB from BGR
