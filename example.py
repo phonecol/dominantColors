@@ -4,7 +4,7 @@ import cv2
 
 #open image
 # img = 'colors.jpeg'
-img = '6.jpg'
+img = 'colors.jpeg'
 img = cv2.imread(img)
 
 #convert to RGB from BGR
@@ -21,7 +21,7 @@ colors = dc.dominantColors()
 print(colors)
 # dc.imageChannelHistogram()
 
-dc.saveHistogram("D:\Lenovo\Desktop\cv2\dominantColors\Histogram")
+dc.saveHistogram("Histogram")
 dc.plotHistogram()
 # dc.plotClusters()
 dc.getAveColor()
