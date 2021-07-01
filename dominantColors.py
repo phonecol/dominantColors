@@ -227,8 +227,8 @@ class DominantColors:
             img_MEAN_RGB.append(img_mean)
             img_STD_RGB.append(img_std)
 
-        print(img_MEAN_RGB)
-        print(img_STD_RGB)
+        print("MEAN RGB: ",img_MEAN_RGB)
+        print("Standard Deviation: ",img_STD_RGB)
         return img_MEAN_RGB, img_STD_RGB
 
 
