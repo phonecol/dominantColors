@@ -150,7 +150,7 @@ class DominantColors:
 
 
 
-    def saveHistogram(self, path):
+    def saveHistogram(self, path, plotFigure=False):
 
         img = self.IMAGE
         #Computing the histograms for each channel
@@ -177,47 +177,39 @@ class DominantColors:
 
 
         #Setup for histogram plotting
-        histoFig = plt.figure()
-        histoAxis = histoFig.add_subplot(111)
+        #default value for plotFigure is false
+        if plotFigure:
+            histoFig = plt.figure()
+            histoAxis = histoFig.add_subplot(111)
 
-        histoAxis.set_facecolor('xkcd:grey')
-        histoAxis.set_xlim([0,256])
-        histoAxis.set_xticks(np.linspace(0,256,9))
-        histoAxis.set_xlabel("Intensity")
-        histoAxis.set_ylabel("Counts")
-        histoAxis.set_title(f"Zone {path.split('_')[-1]} Histogram")
+            histoAxis.set_facecolor('xkcd:grey')
+            histoAxis.set_xlim([0,256])
+            histoAxis.set_xticks(np.linspace(0,256,9))
+            histoAxis.set_xlabel("Intensity")
+            histoAxis.set_ylabel("Counts")
+            histoAxis.set_title(f"Zone {path.split('_')[-1]} Histogram")
 
 
-        #Plots the histograms
-        histoPlotBlue = histoAxis.bar(centers, Bheights, align='center', color='blue', width=edges[1] - edges[0], alpha=0.6)
-        histoPlotGreen = histoAxis.bar(centers, Gheights, align='center', color='green', width=edges[1] - edges[0], alpha=0.6)
-        histoPlotRed = histoAxis.bar(centers, Rheights, align='center', color='red', width=edges[1] - edges[0], alpha=0.6)
+            #Plots the histograms
+            histoPlotBlue = histoAxis.bar(centers, Bheights, align='center', color='blue', width=edges[1] - edges[0], alpha=0.6)
+            histoPlotGreen = histoAxis.bar(centers, Gheights, align='center', color='green', width=edges[1] - edges[0], alpha=0.6)
+            histoPlotRed = histoAxis.bar(centers, Rheights, align='center', color='red', width=edges[1] - edges[0], alpha=0.6)
 
-        #Uncomment for Photoshop-style color-mixing intersections in the saved histograms
-##        histoPlotCyan = histoAxis.bar(centers, np.min([Bheights, Gheights],axis=0), align='center', color='cyan', width=edges[1] - edges[0], alpha=1)
-##        histoPlotMagenta = histoAxis.bar(centers, np.min([Bheights, Rheights],axis=0), align='center', color='magenta', width=edges[1] - edges[0], alpha=1)
-##        histoPlotYellow = histoAxis.bar(centers, np.min([Rheights, Gheights],axis=0), align='center', color='yellow', width=edges[1] - edges[0], alpha=1)
-##
-##        histoPlotWhite = histoAxis.bar(centers, np.min([Bheights, Gheights, Rheights],axis=0), align='center', color='white', width=edges[1] - edges[0], alpha=1)
 
-        #Saving the figures
-        histoFig.savefig(path+'.png')
-##        plt.close()
+            #Saving the figures
+            histoFig.savefig(path+'.png')
 
-    # def getAveColor(self):
-    #     img = self.IMAGE
-    #     imgMasked = np.ma.masked_less(img,20)
-    #     avcolor = np.ma.mean(imgMasked, axis=(0,1))
-    #     std = np.ma.std(imgMasked, axis=(0,1))
-    #     print(imgMasked)
-    #     # print("Average Color",avcolor)
-    #     # print("Standard Deviation of intensity values",std)
 
-    #     return avcolor, std
-
-    def getAveColor(self):
+    def getAveColor(self, getHSV=True,getLab=True):
+        hsv, lab = DominantColors.cvtColorSpace(self)
         img_MEAN_RGB = []
         img_STD_RGB = []
+        img_MEAN_HSV = []
+        img_STD_HSV = []
+        img_MEAN_Lab = []
+        img_STD_Lab = []
+
+
         img = self.IMAGE
         for i in range(0,3):
             val = np.reshape(img[:,:,i],-1)
@@ -227,8 +219,37 @@ class DominantColors:
             img_MEAN_RGB.append(img_mean)
             img_STD_RGB.append(img_std)
 
+            # return img_MEAN_RGB, img_STD_RGB
+        if getHSV:
+            for i in range(0,3):
+                val_hsv = np.reshape(hsv[:,:,i],-1)
+                masked_hsv = np.ma.masked_less(val_hsv,20)
+                img_mean_hsv = np.mean(masked_hsv)
+                img_std_hsv = np.std(masked_hsv)
+                img_MEAN_HSV.append(img_mean_hsv)
+                img_STD_HSV.append(img_std_hsv)
+
+            # return img_MEAN_HSV, img_STD_HSV
+
+        if getHSV:
+            for i in range(0,3):
+                val_lab = np.reshape(lab[:,:,i],-1)
+                masked_lab = np.ma.masked_less(val_lab,20)
+                img_mean_lab = np.mean(masked_lab)
+                img_std_lab = np.std(masked_lab)
+                img_MEAN_Lab.append(img_mean_lab)
+                img_STD_Lab.append(img_std_lab)
+
+            # return img_MEAN_Lab, img_STD_Lab
+
+
         print("MEAN RGB: ",img_MEAN_RGB)
         print("Standard Deviation: ",img_STD_RGB)
-        return img_MEAN_RGB, img_STD_RGB
+        return img_MEAN_RGB, img_STD_RGB, img_MEAN_HSV, img_STD_HSV, img_MEAN_Lab, img_STD_Lab
 
+    def cvtColorSpace(self):
+        img = self.IMAGE
+        hsv= cv2.cvtColor(img,cv2.COLOR_RGB2HSV)
+        lab = cv2.cvtColor(img,cv2.COLOR_RGB2LAB)
 
+        return hsv, lab

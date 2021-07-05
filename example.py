@@ -4,11 +4,8 @@ import cv2
 
 #open image
 # img = 'colors.jpeg'
-<<<<<<< HEAD
 img = '17.jpg'
-=======
-img = 'colors.jpeg'
->>>>>>> eb34b6c583f19d51a2e728bcf899a9b34f3ce3fd
+# img = 'colors.jpeg'
 img = cv2.imread(img)
 
 #convert to RGB from BGR
