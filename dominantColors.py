@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+
 class DominantColors:
 
     CLUSTERS = None
@@ -84,27 +85,39 @@ class DominantColors:
         hist /= hist.sum()
 
         #appending frequencies to cluster centers
-        colors = self.COLORS
+        centroids = self.COLORS.astype(float)
 
         #descending order sorting as per frequency count
         # colors = colors[(~hist).argsort()]
         # hist= hist[(~hist).argsort()]
 
         # create empty chart
-        chart = np.zeros((50,500,3), np.uint8)
+        chart = np.zeros((50,500,3), dtype=np.uint8)
         start = 0
 
         #for creating color rectangles
-        for i in range(self.CLUSTERS):
-            end = start +hist[i]*500
+        # for i in range(self.CLUSTERS):
+        #     end = start +hist[i]*500
 
-            r = colors[i][0]
-            g = colors[i][1]
-            b = colors[i][2]
+        #     r = colors[i][0]
+        #     g = colors[i][1]
+        #     b = colors[i][2]
 
-            cv2.rectangle(chart, (int(start),0),(int(end),50),(r,g,b), -1)
-            start = end
+        #     cv2.rectangle(chart, (int(start),0),(int(end),50),(r,g,b), -1)
+        #     start = end
+
+        colors = sorted([(percent, color) for (percent, color) in zip(hist, centroids)])
+
         #display chart
+        for (percent, color) in colors:
+            print(color, "{:0.2f}%".format(percent * 100))
+            end = start + (percent * 500)
+            cv2.rectangle(chart, (int(start), 0), (int(end), 50), \
+                        color.astype("uint8").tolist(), -1)
+            start = end
+
+
+
         plt.figure()
         plt.axis("off")
         plt.imshow(chart)
@@ -145,6 +158,7 @@ class DominantColors:
 
     def imageChannelHistogram(self,channel, bins=256):
         img = self.IMAGE
+        hsv, lab = DominantColors.cvtColorSpace(self)
         heights, edges = np.histogram(img[:,:,channel], bins, (0,256))
         return heights, edges
 
@@ -152,7 +166,7 @@ class DominantColors:
 
     def saveHistogram(self, path, plotFigure=False):
 
-        img = self.IMAGE
+        # img = self.IMAGE
         #Computing the histograms for each channel
         Rheights, edges = self.imageChannelHistogram(0)
         Gheights, edges = self.imageChannelHistogram(1)
@@ -231,7 +245,7 @@ class DominantColors:
 
             # return img_MEAN_HSV, img_STD_HSV
 
-        if getHSV:
+        if getLab:
             for i in range(0,3):
                 val_lab = np.reshape(lab[:,:,i],-1)
                 masked_lab = np.ma.masked_less(val_lab,20)
@@ -242,9 +256,6 @@ class DominantColors:
 
             # return img_MEAN_Lab, img_STD_Lab
 
-
-        print("MEAN RGB: ",img_MEAN_RGB)
-        print("Standard Deviation: ",img_STD_RGB)
         return img_MEAN_RGB, img_STD_RGB, img_MEAN_HSV, img_STD_HSV, img_MEAN_Lab, img_STD_Lab
 
     def cvtColorSpace(self):

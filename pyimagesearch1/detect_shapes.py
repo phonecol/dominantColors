@@ -45,11 +45,11 @@ for c in cnts:
     cv2.rectangle(masked,(x-10,y-10),(x+w+10,y+h+10),(200,0,0),2)
 
     #write the cropped ROI
-    cv2.imwrite(str(idx) + '.jpg', roi)
+    cv2.imwrite("ROI/"+str(idx) + '.jpg', roi)
 
     # show the output image
     cv2.imshow("Image", masked)
     cv2.waitKey(0)
-    
+
 cv2.destroyAllWindows()
 

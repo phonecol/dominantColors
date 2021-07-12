@@ -3,7 +3,7 @@ import cv2
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
+from natsort import natsorted
 #The filenames of the images of the ROI of paper sensor must be the PPM levels.
 
 #the directory of the images of the paper sensor
@@ -20,17 +20,26 @@ def get_image(image_path):
     return image
 
 
+files = os.listdir(IMAGE_DIRECTORY)
+files = natsorted(files)
+# files.sort(key=lambda x:int(x[:2]))
+print(files)
+
 #a loop for getting the images in the folder and append them into a list
-for file in os.listdir(IMAGE_DIRECTORY):
+for file in files:
+    print(file)
+
+
     images.append(get_image(os.path.join(IMAGE_DIRECTORY, file)))
     ppm_value, image_type = file.split('.')
     print(ppm_value)
     ppm_values.append(ppm_value)
 
-ppm_values = np.array(ppm_values) #convert the list to numpy array
 
+ppm_values = np.array(ppm_values) #convert the list to numpy array
+print(ppm_values)
 #for KMeans Algorithm
-clusters = 2 #number of clusters of colors. Value is at the range of (2-5)
+clusters = 4 #number of clusters of colors. Value is at the range of (2-5)
 index = 1
 
 #
@@ -46,10 +55,13 @@ print(len(images))
 for i in range(len(images)):
     #initialize the DominantColors class
     dc = DominantColors(images[i],clusters)
-    dc.saveHistogram("Histograms/{}Histogram".format(i))
+    dc.saveHistogram("Histograms/{}Histogram".format(i), True)
     #call the dominantColors function to get the dominant colors of the image using KMeans Algorithm
     colors = dc.dominantColors()
     print("Dominant Colors: ",colors)
+    colors.sort(axis=0)
+    print("Dominant Colors sorted: ",colors)
+    dc.plotHistogram()
 
 
     #call the getAveColor function to get the average RGB pixel intensity and its standard deviation of the paper sensor
@@ -74,17 +86,20 @@ for i in range(len(images)):
 
     Lab_stds.append(lab_std)
 
-
+RGB_KMeans_notBlack= []
 #convert the list into numpy array
 RGB_KMeans = np.array(RGB_KMeans)
+
+RGB_KMeans_notBlack = RGB_KMeans[:,1:clusters,:]
 RGB_Means = np.array(RGB_Means)
 RGB_stds = np.array(RGB_stds)
 HSV_Means = np.array(HSV_Means)
 HSV_stds = np.array(HSV_stds)
 Lab_Means = np.array(Lab_Means)
 Lab_stds = np.array(Lab_stds)
-print("RGB KMEANS: ",RGB_KMeans)
 
+print("RGB KMEANS: ",RGB_KMeans)
+print("RGB KMEANS: ",RGB_KMeans_notBlack)
 print("RGB MEANS: ",RGB_Means)
 
 print("RGB STDS: ",RGB_stds)
@@ -98,30 +113,49 @@ print("HSV STDS: ",HSV_stds)
 print("Lab MEANS: ",Lab_Means)
 
 print("Lab STDS: ",Lab_stds)
+
+HSV_Means[:,0] = HSV_Means[:,0]/180*360
+
+HSV_Means[:,1:] = np.round(HSV_Means[:,1:]/255,8)
+HSV_stds[:,0] = HSV_stds[:,0]/180*360
+HSV_stds[:,1:] = np.round(HSV_stds[:,1:]/255,8)
 red = RGB_Means[:,0]
 green = RGB_Means[:,1]
 blue = RGB_Means[:,2]
 
 
 #convert the data type into a string
+
 ppm_values_str = ppm_values.astype(str).T
 RGB_Means_str = RGB_Means.astype(str).T
 RGB_stds_str = RGB_stds.astype(str).T
+HSV_Means_str = HSV_Means.astype(str).T
+HSV_stds_str = HSV_stds.astype(str).T
+Lab_Means_str = Lab_Means.astype(str).T
+Lab_stds_str = Lab_stds.astype(str).T
+
+
+
+
+
+print("ppm",ppm_values_str)
+print("means",RGB_Means_str)
+print("stds",RGB_stds_str)
 
 #concatinate the ppm values, RGB Means, amd the RGB Standard deviation using vstack
-data = np.vstack((ppm_values_str,RGB_Means_str,RGB_stds_str))
-
+data = np.vstack((ppm_values_str,RGB_Means_str,RGB_stds_str,HSV_Means_str,HSV_stds_str,Lab_Means_str,Lab_stds_str))
+print("data",data)
 #transpose the data array
 data = data.T
-
+print("data",data)
 #initialize the header for the csv file
-header = 'PPM Values, R, G, B, R_std, G_std,B_std'
+header = 'PPM Values, R, G, B, R_std, G_std,B_std,H,S,V,H_std,S_std,V_std,L,a,b,L_std,a_std,b_std'
 
 #save the data array in a csv filetype with a filename of "data.csv" with the following header defined above
 np.savetxt("data.csv", data, delimiter=",",header= header,fmt='%s')
 
 
-print(data)
+
 
 
 fig, (ax1, ax2,ax3) = plt.subplots(3, 1)
