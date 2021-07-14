@@ -3,7 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import cv2
 
 #read image
-img = cv2.imread('5.jpg')
+img = cv2.imread('17.jpg')
 
 #convert image from BGR to RGB
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)

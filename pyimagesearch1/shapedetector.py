@@ -32,4 +32,4 @@ class ShapeDetector:
         else:
             shape = "circle"
             # return the name of the shape
-        return shape
+        return shape, peri

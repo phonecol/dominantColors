@@ -8,7 +8,7 @@ import numpy as np
 #     help ="path to the input image")
 # args = vars(ap.parse_args())
 # path = 'shapes_and_colors.jpg'
-path = 'papersensor.jpg'
+path = '90ppmafter2mins.jpg'
 # image = cv2.imread(args[image])
 image = cv2.imread(path)
 
@@ -27,7 +27,7 @@ blurred = cv2.GaussianBlur(gray,(5,5),0)
 
 #thresholding separates the paper sensor or ROI to the background
 #this will create the mask
-thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
+thresh = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY)[1]
 
 #the original image will be masked with thresholded image so that the paper sensor will have a black background
 masked = cv2.bitwise_and(image,image, mask=thresh)

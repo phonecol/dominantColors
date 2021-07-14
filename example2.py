@@ -61,7 +61,7 @@ for i in range(len(images)):
     print("Dominant Colors: ",colors)
     colors.sort(axis=0)
     print("Dominant Colors sorted: ",colors)
-    dc.plotHistogram()
+    # dc.plotHistogram()
 
 
     #call the getAveColor function to get the average RGB pixel intensity and its standard deviation of the paper sensor
