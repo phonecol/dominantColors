@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import sys
 import math
 
-path = '2mins.jpg'
+path = '3minss.jpg'
 # path = 'papersensor.jpg'
 # path = 'Inked90ppmafter2min__LI.jpg'
 img = cv2.imread(path)
@@ -25,7 +25,7 @@ img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 img = cv2.medianBlur(img, 5)
 # finds the circles in the grayscale image using the Hough transform
 circles = cv2.HoughCircles(image=img, method=cv2.HOUGH_GRADIENT, dp=1,
-                            minDist=30, param1=90, param2=32, maxRadius=40)
+                            minDist=25, param1=90, param2=32, maxRadius=40)
 
 for co, i in enumerate(circles[0, :], start=1):
     # draw the outer circle
@@ -47,7 +47,7 @@ for co, i in enumerate(circles[0, :], start=1):
     cv2.rectangle(cimg,(origin_x-10,origin_y-10),(origin_x+2*radius+10,origin_y+2*radius+10),(200,0,0),2)
 
     roi=cimg[origin_y:origin_y+2*radius,origin_x:origin_x+2*radius]
-    roi2=cimg[origin_y+10:origin_y+2*radius-10,origin_x+10:origin_x+2*radius-10]
+    roi2=cimg[origin_y+11:origin_y+2*radius-11,origin_x+11:origin_x+2*radius-11]
     cv2.imwrite("ROI/"+str(co) + '.jpg', roi)
     cv2.imwrite("ROI/"+'square'+str(co) + '.jpg', roi2)
 

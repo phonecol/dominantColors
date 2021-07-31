@@ -24,6 +24,6 @@ print(colors)
 
 dc.saveHistogram("Histogram")
 dc.plotHistogram()
-# dc.plotClusters()
+dc.plotClusters()
 dc.getAveColor()
 dc.colorPixels()

@@ -17,6 +17,7 @@ ppm_values = []
 def get_image(image_path):
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     return image
 
 
@@ -61,6 +62,7 @@ for i in range(len(images)):
     print("Dominant Colors: ",colors)
     colors.sort(axis=0)
     print("Dominant Colors sorted: ",colors)
+    hsv,lab = dc.cvtColorSpace()
     # dc.plotHistogram()
 
 
