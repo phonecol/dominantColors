@@ -35,7 +35,7 @@ sleep(2)
 
 for i in range(args["images"]):
     #capture image every 30 seconds
-    filename ='/home/pi/Desktop/dominantColors/images/'+args["filename"]+'/'+args["filename"]+','+str(i*30)+',seconds.png'
+    filename ='/home/pi/Desktop/dominantColors/captured_images/'+args["filename"]+'/'+args["filename"]+','+str(i*30)+',seconds.png'
     camera.capture(filename)
     print('Image captured and saved as ', filename )
     sleep(5)
