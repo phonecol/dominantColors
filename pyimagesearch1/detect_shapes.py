@@ -4,7 +4,7 @@ import imutils
 import cv2
 
 #load image
-path = 'papersensor.jpg'
+path = 'Image.jpeg'
 image = cv2.imread(path)
 
 # resize image
@@ -21,7 +21,7 @@ blurred = cv2.GaussianBlur(gray, (5,5),0)
 
 #thresholding separates the paper sensor or ROI to the background
 #this will create the mask
-thresh = cv2.threshold(blurred,200,255, cv2.THRESH_BINARY)[1]
+thresh = cv2.threshold(blurred,150,255, cv2.THRESH_BINARY)[1]
 
 #the original image will be masked with thresholded image so that the paper sensor will have a black background
 masked = cv2.bitwise_and(resized,resized, mask=thresh)

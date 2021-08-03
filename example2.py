@@ -50,7 +50,7 @@ red = RGB_Means[:,0]
 green = RGB_Means[:,1]
 blue = RGB_Means[:,2]
 print(red)
-x= np.arange(20)
+x= np.arange(4 )
 plt.plot(x,red,color='red', marker='o', linestyle='dashed')
 plt.plot(x,blue,color='green', marker='o', linestyle='dashed')
 plt.plot(x,green,color='blue', marker='o', linestyle='dashed')
