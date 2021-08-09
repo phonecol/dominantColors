@@ -4,13 +4,11 @@ import imutils
 import cv2
 # Inked90ppmafter2min__LI
 #load image
-<<<<<<< HEAD
-path = 'Image.jpeg'
-=======
-path = '90ppmafter2minss.jpg'
+
+path = '0ppm,0,seconds.png'
 # path = 'papersensor.jpg'
 # path = 'Inked90ppmafter2min__LI.jpg'
->>>>>>> 843faaa0ced70aed5d5c8d2d32d8317a17192d92
+# >>>>>>> 843faaa0ced70aed5d5c8d2d32d8317a17192d92
 image = cv2.imread(path)
 
 # resize image
@@ -27,11 +25,11 @@ blurred = cv2.GaussianBlur(gray, (5,5),0)
 
 #thresholding separates the paper sensor or ROI to the background
 #this will create the mask
-<<<<<<< HEAD
-thresh = cv2.threshold(blurred,150,255, cv2.THRESH_BINARY)[1]
-=======
-thresh = cv2.threshold(blurred,100,255, cv2.THRESH_BINARY)[1]
->>>>>>> 843faaa0ced70aed5d5c8d2d32d8317a17192d92
+# <<<<<<< HEAD
+
+
+thresh = cv2.threshold(blurred,80,255, cv2.THRESH_BINARY)[1]
+# >>>>>>> 843faaa0ced70aed5d5c8d2d32d8317a17192d92
 
 #the original image will be masked with thresholded image so that the paper sensor will have a black background
 masked = cv2.bitwise_and(resized,resized, mask=thresh)
@@ -59,7 +57,7 @@ for c in cnts:
     shape, peri = sd.detect(c)
 
 
-    if shape == "circle" and peri > 100 and peri <240:
+    if shape == "circle" and peri > 40 and peri <400:
         print(shape)
         print(peri)
         x,y,w,h = cv2.boundingRect(c)

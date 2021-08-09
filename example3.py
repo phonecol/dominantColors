@@ -47,8 +47,8 @@ def get_images_from_a_folder(path):
     print(ppm_values)
     # print(combined)
     mostColorMontage = build_montages(combined, (128,128), (2,4))
-    cv2.imshow("Most Colorful",mostColorMontage[0])
-    cv2.waitKey(0)
+#     cv2.imshow("Most Colorful",mostColorMontage[0])
+#     cv2.waitKey(0)
     return images, ppm_values
 
 
