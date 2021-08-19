@@ -101,9 +101,9 @@ for i in range(len(images)):
     Lab_stds.append(lab_std)
     colorspaces.append((colors, rgb_mean, rgb_std, hsv_mean, hsv_std, lab_mean, lab_std))
 
-dc.plotMultipleHistogram(0)
-dc.plotMultipleHistogram(1)
-dc.plotMultipleHistogram(2)
+#.plotMultipleHistogram(0)
+#dc.plotMultipleHistogram(1)
+#dc.plotMultipleHistogram(2)
 
 #convert the list into numpy array
 RGB_KMeans = np.array(RGB_KMeans)
@@ -218,7 +218,7 @@ plt.scatter(ppm_values, RGB_Means[:,0], s=area, c=scatter_color, alpha=0.5)
 plt.show()
 
 
-scatter_hsv = HSV_Means[:,0]/255
+scatter_hsv = HSV_Means[:,0]
 print(scatter_hsv)
 area = 500  # 0 to 15 point radii
 
