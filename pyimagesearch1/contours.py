@@ -9,6 +9,7 @@ import numpy as np
 # args = vars(ap.parse_args())
 # path = 'shapes_and_colors.jpg'
 path = '90ppmafter2mins.jpg'
+path = '0ppm,0,seconds.png'
 # image = cv2.imread(args[image])
 image = cv2.imread(path)
 
@@ -31,7 +32,7 @@ thresh = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY)[1]
 
 #the original image will be masked with thresholded image so that the paper sensor will have a black background
 masked = cv2.bitwise_and(image,image, mask=thresh)
-print(image.shape)
+# print(image.shape)
 
 cv2.imshow('Original',image)
 cv2.imshow('Resized',resized)
@@ -43,7 +44,7 @@ cv2.waitKey(0)
 cnts = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL,
     cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
-
+print(cnts)
 #for loop over the contours
 for c in cnts:
     #compute the center of the contour

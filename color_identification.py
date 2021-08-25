@@ -124,11 +124,11 @@ def show_selected_images(images,ref_img, color, threshold, colors_to_match):
     print(dE2000)
     return dE76, dE2000
 
-ref_img= get_image('square7.jpg')
-ref_color = get_colors(get_image('square7.jpg'),1,True)
+ref_img= get_image('square1.jpg')
+ref_color = get_colors(get_image('square1.jpg'),1,True)
 print(ref_color)
 
-IMAGE_DIRECTORY = 'images'
+IMAGE_DIRECTORY = 'roi2'
 COLORS = {
     'GREEN': [0,128,0],
     'BLUE': [0,0,128],

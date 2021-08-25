@@ -25,8 +25,13 @@ img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 img = cv2.medianBlur(img, 5)
 # finds the circles in the grayscale image using the Hough transform
 circles = cv2.HoughCircles(image=img, method=cv2.HOUGH_GRADIENT, dp=1,
-                            minDist=300, param1=40, param2=23,minRadius=50, maxRadius=60)
+                            minDist=300, param1=40, param2=23,minRadius=45, maxRadius=60)
+print(circles)
 
+# contours = circles[0][:].argsort(axis=0)
+contours = np.sort(circles[0][:], axis=0)
+# contours = sorted(circles, key = lambda x: x[0][:])
+print(contours)
 
 for co, i in enumerate(circles[0, :], start=1):
     # draw the outer circle
@@ -34,7 +39,7 @@ for co, i in enumerate(circles[0, :], start=1):
     print(i[0])
     print(i[1])
     print(i[2])
-#     cv2.putText(cimg,str(co),(int(i[0]),int(i[1])),cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),2)
+    cv2.putText(cimg,str(co),(int(i[0]),int(i[1])),cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),2)
     cv2.circle(cimg,(int(i[0]),int(i[1])),int(i[2]),(0,255,0),2)
     # draw the center of the circle
     # cv2.circle(cimg,(int(i[0]),int(i[1])),2,(0,0,255),3)
