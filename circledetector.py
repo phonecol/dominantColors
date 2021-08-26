@@ -27,7 +27,7 @@ img = cv2.medianBlur(img, 5)
 circles = cv2.HoughCircles(image=img, method=cv2.HOUGH_GRADIENT, dp=1,
                             minDist=300, param1=40, param2=23,minRadius=45, maxRadius=60)
 print(circles)
-
+print("asd")
 # contours = circles[0][:].argsort(axis=0)
 contours = np.sort(circles[0][:], axis=0)
 # contours = sorted(circles, key = lambda x: x[0][:])
