@@ -199,7 +199,7 @@ class DominantColors:
 
 
     def getAveColor(self, getHSV=True,getLab=True):
-        hsv, lab = DominantColors.cvtColorSpace(self)
+        hsv, lab ,gray= DominantColors.cvtColorSpace(self)
         img_MEAN_RGB = []
         img_STD_RGB = []
         img_MEAN_HSV = []
@@ -246,6 +246,7 @@ class DominantColors:
         img = self.IMAGE
         hsv= cv2.cvtColor(img,cv2.COLOR_RGB2HSV)
         lab = cv2.cvtColor(img,cv2.COLOR_RGB2LAB)
+        gray = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
 
 
-        return hsv, lab
+        return hsv, lab, gray

@@ -61,7 +61,7 @@ def save_data(data):
 
 
 
-IMAGE_DIRECTORY = 'images'
+IMAGE_DIRECTORY = 'roi2'
 images , ppm_values = get_images_from_a_folder(IMAGE_DIRECTORY)
 
 
@@ -82,12 +82,12 @@ print(len(images))
 for i in range(len(images)):
 
     dc = DominantColors(images[i],images,clusters) #initialize the DominantColors class
-    # dc.saveHistogram("Histograms/{}Histogram".format(i), False)
+    dc.saveHistogram("Histograms/{}Histogram".format(i), True)
 
     colors = dc.dominantColors()  #call the dominantColors function to get the dominant colors of the image using KMeans Algorithm
     print("Dominant Colors: ",colors)
     print("Dominant Colors sorted: ",colors)
-    hsv,lab = dc.cvtColorSpace()
+    hsv,lab,gray = dc.cvtColorSpace()
     # dc.plotHistogram()
     rgb_mean,rgb_std,hsv_mean,hsv_std,lab_mean,lab_std = dc.getAveColor()  #call the getAveColor function to get the average RGB pixel intensity and its standard deviation of the paper sensor
 
@@ -101,9 +101,9 @@ for i in range(len(images)):
     Lab_stds.append(lab_std)
     colorspaces.append((colors, rgb_mean, rgb_std, hsv_mean, hsv_std, lab_mean, lab_std))
 
-#.plotMultipleHistogram(0)
-#dc.plotMultipleHistogram(1)
-#dc.plotMultipleHistogram(2)
+dc.plotMultipleHistogram(0)
+dc.plotMultipleHistogram(1)
+dc.plotMultipleHistogram(2)
 
 #convert the list into numpy array
 RGB_KMeans = np.array(RGB_KMeans)

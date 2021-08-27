@@ -4,7 +4,7 @@ import cv2
 
 #open image
 # img = 'colors.jpeg'
-img = '17.jpg'
+img = 'square6.jpg'
 # img = 'colors.jpeg'
 img = cv2.imread(img)
 

@@ -28,10 +28,22 @@ circles = cv2.HoughCircles(image=img, method=cv2.HOUGH_GRADIENT, dp=1,
                             minDist=300, param1=40, param2=23,minRadius=45, maxRadius=60)
 print(circles)
 print("asd")
+print(circles[0,:,0])
+print("asd")
 # contours = circles[0][:].argsort(axis=0)
 contours = np.sort(circles[0][:], axis=0)
+# i sort tanan columns by rows
 # contours = sorted(circles, key = lambda x: x[0][:])
 print(contours)
+
+
+mask = np.zeros(shape=img.shape[0:2], dtype="bool")
+for loop!!!!
+circle = cv2.circle(img,(circles[0,:,0], circles[0,:,1]),50, (255,255,255),-1)
+mask[circle] = 1
+
+cv2.imshow(mask)
+
 
 for co, i in enumerate(circles[0, :], start=1):
     # draw the outer circle
