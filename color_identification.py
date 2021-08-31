@@ -33,7 +33,7 @@ def RGB2HEX(color):
 def get_image(image_path):
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = cv2.resize(image, (250, 250))
+    image = cv2.resize(image, (200, 200))
     image = image[20:230, 20:230]
     return image
 
@@ -105,7 +105,7 @@ def show_selected_images(images,ref_img, color, threshold, colors_to_match):
 
     merged = tuple(zip(images,dE76,dE2000))
     merged = [r[0] for r in merged[:8]]
-    deltaE_Montage = build_montages(merged, (250,250), (8,1))
+    deltaE_Montage = build_montages(merged, (150,150), (8,1))
     cv2.imshow("Most Colorful",deltaE_Montage[0])
     cv2.imshow("Reference Image", ref_img)
     cv2.waitKey(0)
@@ -124,8 +124,8 @@ def show_selected_images(images,ref_img, color, threshold, colors_to_match):
     print(dE2000)
     return dE76, dE2000
 
-ref_img= get_image('square1.jpg')
-ref_color = get_colors(get_image('square1.jpg'),1,True)
+ref_img= get_image('roi2/4,90ppm.jpg')
+ref_color = get_colors(get_image('roi2/4,90ppm.jpg'),1,True)
 print(ref_color)
 
 IMAGE_DIRECTORY = 'roi2'

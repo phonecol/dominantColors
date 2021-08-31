@@ -5,6 +5,8 @@ import sys
 import math
 
 path = '1,90ppm,26,30,seconds.png'
+imgNum,ppm_value,x,xx,xxx = path.split(',')
+print(ppm_value)
 # path = 'papersensor.jpg'
 # path = 'Inked90ppmafter2min__LI.jpg'
 img = cv2.imread(path)
@@ -60,7 +62,7 @@ mask = np.zeros(shape=img.shape[0:2],dtype='uint8')
 #create mask for each paper sensor
 for co, i in enumerate(circles, start=1):
     # draw the outer circle
-    cv2.circle(mask,(int(i[0]),int(i[1])),int(i[2]-10),(255,255,255),-1)
+    cv2.circle(mask,(int(i[0]),int(i[1])),int(i[2]),(255,255,255),-1)
 
 cv2.imshow('mask',mask)
 cv2.waitKey(0)
@@ -82,7 +84,7 @@ for co, i in enumerate(circles, start=1):
     print(i[2])
     
     cv2.putText(masked,str(co),(int(i[0]+60),int(i[1])+60),cv2.FONT_HERSHEY_SIMPLEX, 1.5,(255,255,255),2)
-    cv2.circle(masked,(int(i[0]),int(i[1])),int(i[2]-5),(0,255,0),2)
+    cv2.circle(masked,(int(i[0]),int(i[1])),int(i[2]),(0,255,0),2)
     
     radius = int(math.ceil(i[2]))
     origin_x = int(math.ceil(i[0]) - radius)
@@ -93,8 +95,8 @@ for co, i in enumerate(circles, start=1):
 
     roi=masked[origin_y:origin_y+2*radius,origin_x:origin_x+2*radius]
     roi2=masked[origin_y+20:origin_y+2*radius-20,origin_x+20:origin_x+2*radius-20]
-    cv2.imwrite("ROI/"+str(co) + '.jpg', roi)
-    cv2.imwrite("ROI/"+'square'+str(co) + '.jpg', roi2)
+    cv2.imwrite("ROI/"+str(co)+','+ppm_value + '.jpg', roi)
+    cv2.imwrite("roi2/"+str(co)+','+ppm_value+ '.jpg', roi2)
 
     # roi=cimg[y:y+h,x:x+w]
 # print the number of circles detected
