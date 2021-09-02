@@ -68,14 +68,15 @@ def get_roi(cnts,sd,masked,idx,i):
             print(peri)
             x,y,w,h = cv2.boundingRect(c)
             roi=masked[y:y+h,x:x+w]
+            roi = cv2.resize(roi, (100,100))
             cv2.rectangle(masked,(x-10,y-10),(x+w+10,y+h+10),(200,0,0),2)
 
             #write the cropped ROI
-            cv2.imwrite("ROI/"+ppm_values[i] +str(idx) + '.jpg', roi)
+            cv2.imwrite("ROI/"+ppm_values[i] + '_'+str(idx) + '.jpg', roi)
 
             # show the output image
-            cv2.imshow("Image", masked)
-            cv2.waitKey(0)
+            # cv2.imshow("Image", masked)
+            # cv2.waitKey(0)
             idx+= 1
 
 
