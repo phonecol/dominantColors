@@ -101,9 +101,9 @@ for i in range(len(images)):
     Lab_stds.append(lab_std)
     colorspaces.append((colors, rgb_mean, rgb_std, hsv_mean, hsv_std, lab_mean, lab_std))
 
-dc.plotMultipleHistogram(0)
-dc.plotMultipleHistogram(1)
-dc.plotMultipleHistogram(2)
+# dc.plotMultipleHistogram(0)
+# dc.plotMultipleHistogram(1)
+# dc.plotMultipleHistogram(2)
 
 #convert the list into numpy array
 RGB_KMeans = np.array(RGB_KMeans)
