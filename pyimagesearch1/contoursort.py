@@ -45,7 +45,7 @@ def draw_contour(image, c, i):
     # print(h)
     # print(w)
     roi=image[y+5:y+h-5,x+5:x+w-5]
-    # cv2.rectangle(image,(x,y),(x+w,y+h),(200,0,0),0)
+    cv2.rectangle(image,(x,y),(x+w,y+h),(200,0,0),0)
     cv2.imwrite("ROI15min/"+str(i) + '.jpg', roi)
     #write the cropped ROI
 
@@ -68,7 +68,7 @@ for chan in cv2.split(image):
     # blur the channel, extract edges from it, and accumulate the set
     # of edges for the image
     chan = cv2.medianBlur(chan, 11)
-    edged = cv2.Canny(chan, 20, 100)
+    edged = cv2.Canny(chan, 20, 80)
     accumEdged = cv2.bitwise_or(accumEdged, edged)
 
 # show the accumulated edge map

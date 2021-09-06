@@ -86,15 +86,15 @@ def get_images_from_a_folder(path):
     results_hsv = sorted(results_hsv, key=lambda x: x[1], reverse = True)
 
     results_gray = sorted(results_gray, key=lambda x: x[1], reverse = True)
-    rgb_images = [r[0] for r in results[:8]]
-    hsv_images = [r[0] for r in results_hsv[:8]]
+    rgb_images = [r[0] for r in results[:10]]
+    hsv_images = [r[0] for r in results_hsv[:10]]
 
-    gray_images = [r[0] for r in results_gray[:8]]
+    gray_images = [r[0] for r in results_gray[:10]]
     # construct the montages for the two sets of images
-    rgb_images_Montage = build_montages(rgb_images, (200,200), (2,4))
+    rgb_images_Montage = build_montages(rgb_images, (200,200), (10,1))
 
-    hsv_images_Montage = build_montages(hsv_images, (200,200), (2,4))
-    gray_images_Montage = build_montages(gray_images, (200,200), (2,4))
+    hsv_images_Montage = build_montages(hsv_images, (200,200), (10,1))
+    gray_images_Montage = build_montages(gray_images, (200,200), (10,1))
 
     cv2.imshow("RGB",rgb_images_Montage[0])
 
@@ -110,7 +110,7 @@ def get_images_from_a_folder(path):
 
 
 
-IMAGE_DIRECTORY = 'roi2'
+IMAGE_DIRECTORY = 'ROI5min'
 images ,hsvs,gray, ppm_values = get_images_from_a_folder(IMAGE_DIRECTORY)
 
 bgr_Means = []

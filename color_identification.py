@@ -88,7 +88,7 @@ def get_deltaE(image,color, threshold= 60, number_of_colors = 3,de00 = True, de7
     return  dE_76, dE_2000
 
 
-def show_selected_images(images,images_bgr,ref_img,ref_img_bgr, color, threshold, colors_to_match):
+def show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, color, threshold, colors_to_match):
     index = 0
     dE76 = []
     dE2000 = []
@@ -104,13 +104,15 @@ def show_selected_images(images,images_bgr,ref_img,ref_img_bgr, color, threshold
             cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0,255,0), 3)
         cv2.putText(images_bgr[i], "{:0.2f}".format(dE_76[0][0]), (5,50),
             cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0,255,0), 3)
+        cv2.putText(images_bgr[i], "{}".format(files[i]), (5,120),
+            cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0,255,0), 1)
         dE76.append(dE_76)
         dE2000.append(dE_2000)
 
     merged = tuple(zip(images_bgr,dE76,dE2000))
-    merged = [r[0] for r in merged[:9]]
-    deltaE_Montage = build_montages(merged, (150,150), (9,1))
-    cv2.imshow("Most Colorful",deltaE_Montage[0])
+    merged = [r[0] for r in merged[:10]]
+    deltaE_Montage = build_montages(merged, (150,150), (10,1))
+    cv2.imshow("deltaE",deltaE_Montage[0])
     cv2.imshow("Reference Image", ref_img_bgr)
     cv2.waitKey(0)
 
@@ -128,7 +130,7 @@ def show_selected_images(images,images_bgr,ref_img,ref_img_bgr, color, threshold
     print(dE2000)
     return dE76, dE2000
 
-IMAGE_DIRECTORY = 'ROI15min'
+IMAGE_DIRECTORY = 'ROI10min'
 
 ref_img= get_image(IMAGE_DIRECTORY+ '/0.jpg')[0]
 ref_img_bgr= get_image(IMAGE_DIRECTORY+ '/0.jpg')[1]
@@ -149,8 +151,10 @@ COLORS = {
 images = []
 combined =[]
 images_bgr = []
+files = []
 for file in os.listdir(IMAGE_DIRECTORY):
     print(file)
+    files.append(file)
     if not file.startswith('.'):
         image,image_bgr = get_image(os.path.join(IMAGE_DIRECTORY, file))
 
@@ -162,11 +166,11 @@ for file in os.listdir(IMAGE_DIRECTORY):
 
         combined.append((combined_image, file))
 
-combined = [r[0] for r in combined[:9]]
-mostColorMontage = build_montages(combined, (250,250), (10,1))
+combined = [r[0] for r in combined[:10]]
+mostColorMontage = build_montages(combined, (150,150), (10,1))
 cv2.imshow("Most Colorful",mostColorMontage[0])
 cv2.waitKey(0)
-
+print(files)
 # print(images)
 
 # plt.figure(figsize=(20, 10))
@@ -177,7 +181,7 @@ cv2.waitKey(0)
 
 plt.figure(figsize = (20, 10))
 print('REF')
-dE76, dE2000 =show_selected_images(images,images_bgr,ref_img,ref_img_bgr, COLORS['REF'], 10, 1)
+dE76, dE2000 =show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, COLORS['REF'], 10, 1)
 print(dE76, dE2000)
 
 
