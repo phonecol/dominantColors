@@ -42,20 +42,25 @@ print("[INFO] computing colorfulness metric for dataset...")
 results = []
 
 # loop over the image paths
+
 for imagePath in paths.list_images(args["images"]):
     #load the image, resize it ( to speed up computation), and
     # compute the colorfulness metric for the image
+    print(imagePath)
+    imgAdd,imgNo = imagePath.split('\\')
+    print(imgNo)
     image = cv2.imread(imagePath)
 
     image = imutils.resize(image, width = 250)
     image = image[20:230,20:230]
-
+    
     C = image_colorfulness(image)
     print(C)
     #display the colorfulness score on the image
     cv2.putText(image, "{:.2f}".format(C), (40,40),
         cv2.FONT_HERSHEY_COMPLEX, 1.4, (0,255,0), 3)
-
+    cv2.putText(image, imgNo, (40,90),
+        cv2.FONT_HERSHEY_COMPLEX, 1.4, (0,255,0), 3)
     #add the image and colorfulness metric to results list
     results.append((image,C))
 
@@ -66,12 +71,12 @@ for imagePath in paths.list_images(args["images"]):
 # print(results)
 print("[INFO] displaying results...")
 results = sorted(results, key=lambda x: x[1], reverse = True)
-mostColor = [r[0] for r in results[:8]]
-leastColor = [r[0] for r in results[-8:]][::-1]
+mostColor = [r[0] for r in results[:10]]
+leastColor = [r[0] for r in results[-10:]][::-1]
 
 # construct the montages for the two sets of images
-mostColorMontage = build_montages(mostColor, (128,128), (2,4))
-leastColorMontage = build_montages(leastColor, (128,128), (2,4))
+mostColorMontage = build_montages(mostColor, (128,128), (10,1))
+leastColorMontage = build_montages(leastColor, (128,128), (10,1))
 
 cv2.imshow("Most Colorful",mostColorMontage[0])
 cv2.imshow("Least Colorful",leastColorMontage[0])

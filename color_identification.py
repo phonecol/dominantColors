@@ -1,3 +1,4 @@
+# from openfolders import IMAGE_DIRECTORY
 from typing import OrderedDict
 from skimage.color.delta_e import deltaE_ciede2000
 from sklearn.cluster import KMeans
@@ -32,10 +33,13 @@ def RGB2HEX(color):
 
 def get_image(image_path):
     image = cv2.imread(image_path)
+    image_bgr = image.copy()
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(image, (200, 200))
     image = image[20:230, 20:230]
-    return image
+    image_bgr = cv2.resize(image_bgr, (200, 200))
+    image_bgr = image_bgr[20:230, 20:230]
+    return image, image_bgr
 
 def get_colors(image, number_of_colors, show_chart):
 
@@ -84,8 +88,8 @@ def get_deltaE(image,color, threshold= 60, number_of_colors = 3,de00 = True, de7
     return  dE_76, dE_2000
 
 
-def show_selected_images(images,ref_img, color, threshold, colors_to_match):
-    index = 1
+def show_selected_images(images,images_bgr,ref_img,ref_img_bgr, color, threshold, colors_to_match):
+    index = 0
     dE76 = []
     dE2000 = []
     for i in range(len(images)):
@@ -96,18 +100,18 @@ def show_selected_images(images,ref_img, color, threshold, colors_to_match):
                                         colors_to_match,True,True)
 
 
-        cv2.putText(images[i], "{:0.2f}".format(dE_2000[0][0]), (5,100),
+        cv2.putText(images_bgr[i], "{:0.2f}".format(dE_2000[0][0]), (5,100),
             cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0,255,0), 3)
-        cv2.putText(images[i], "{:0.2f}".format(dE_76[0][0]), (5,50),
+        cv2.putText(images_bgr[i], "{:0.2f}".format(dE_76[0][0]), (5,50),
             cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0,255,0), 3)
         dE76.append(dE_76)
         dE2000.append(dE_2000)
 
-    merged = tuple(zip(images,dE76,dE2000))
-    merged = [r[0] for r in merged[:8]]
-    deltaE_Montage = build_montages(merged, (150,150), (8,1))
+    merged = tuple(zip(images_bgr,dE76,dE2000))
+    merged = [r[0] for r in merged[:9]]
+    deltaE_Montage = build_montages(merged, (150,150), (9,1))
     cv2.imshow("Most Colorful",deltaE_Montage[0])
-    cv2.imshow("Reference Image", ref_img)
+    cv2.imshow("Reference Image", ref_img_bgr)
     cv2.waitKey(0)
 
 
@@ -124,11 +128,14 @@ def show_selected_images(images,ref_img, color, threshold, colors_to_match):
     print(dE2000)
     return dE76, dE2000
 
-ref_img= get_image('roi2/4,90ppm.jpg')
-ref_color = get_colors(get_image('roi2/4,90ppm.jpg'),1,True)
+IMAGE_DIRECTORY = 'ROI15min'
+
+ref_img= get_image(IMAGE_DIRECTORY+ '/0.jpg')[0]
+ref_img_bgr= get_image(IMAGE_DIRECTORY+ '/0.jpg')[1]
+ref_color = get_colors(get_image(IMAGE_DIRECTORY+ '/0.jpg')[0],1,True)
 print(ref_color)
 
-IMAGE_DIRECTORY = 'roi2'
+
 COLORS = {
     'GREEN': [0,128,0],
     'BLUE': [0,0,128],
@@ -141,21 +148,22 @@ COLORS = {
 }
 images = []
 combined =[]
-
+images_bgr = []
 for file in os.listdir(IMAGE_DIRECTORY):
     print(file)
     if not file.startswith('.'):
-        image = get_image(os.path.join(IMAGE_DIRECTORY, file))
+        image,image_bgr = get_image(os.path.join(IMAGE_DIRECTORY, file))
 
         images.append(image)
-        combined_image = image.copy()
+        images_bgr.append(image_bgr)
+        combined_image = image_bgr.copy()
         cv2.putText(combined_image, "{}".format(file), (5,50),
             cv2.FONT_HERSHEY_SIMPLEX, 1.4, (0,255,0), 1)
 
         combined.append((combined_image, file))
 
-combined = [r[0] for r in combined[:8]]
-mostColorMontage = build_montages(combined, (250,250), (8,1))
+combined = [r[0] for r in combined[:9]]
+mostColorMontage = build_montages(combined, (250,250), (10,1))
 cv2.imshow("Most Colorful",mostColorMontage[0])
 cv2.waitKey(0)
 
@@ -169,7 +177,7 @@ cv2.waitKey(0)
 
 plt.figure(figsize = (20, 10))
 print('REF')
-dE76, dE2000 =show_selected_images(images,ref_img, COLORS['REF'], 10, 1)
+dE76, dE2000 =show_selected_images(images,images_bgr,ref_img,ref_img_bgr, COLORS['REF'], 10, 1)
 print(dE76, dE2000)
 
 

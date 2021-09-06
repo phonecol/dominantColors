@@ -8,13 +8,14 @@ import numpy as np
 #     help ="path to the input image")
 # args = vars(ap.parse_args())
 # path = 'shapes_and_colors.jpg'
-path = '90ppmafter2mins.jpg'
-path = '0ppm,0,seconds.png'
+# path = '90ppmafter2mins.jpg'
+# path = '0ppm,0,seconds.png'
 # image = cv2.imread(args[image])
+path = "10mins.PNG"
 image = cv2.imread(path)
 
 # resize image
-scale_percent = 40 # percent of original size
+scale_percent = 90 # percent of original size
 width = int(image.shape[1] * scale_percent / 100)
 height = int(image.shape[0] * scale_percent / 100)
 dim = (width, height)
@@ -28,7 +29,7 @@ blurred = cv2.GaussianBlur(gray,(5,5),0)
 
 #thresholding separates the paper sensor or ROI to the background
 #this will create the mask
-thresh = cv2.threshold(blurred, 100, 255, cv2.THRESH_BINARY)[1]
+thresh = cv2.threshold(blurred, 240, 255, cv2.THRESH_BINARY)[1]
 
 #the original image will be masked with thresholded image so that the paper sensor will have a black background
 masked = cv2.bitwise_and(image,image, mask=thresh)
@@ -45,6 +46,7 @@ cnts = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL,
     cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
 print(cnts)
+print(image.shape)
 #for loop over the contours
 for c in cnts:
     #compute the center of the contour
