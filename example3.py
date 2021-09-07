@@ -61,7 +61,7 @@ def save_data(data):
 
 
 
-IMAGE_DIRECTORY = 'roi2'
+IMAGE_DIRECTORY = 'ROI15min'
 images , ppm_values = get_images_from_a_folder(IMAGE_DIRECTORY)
 
 

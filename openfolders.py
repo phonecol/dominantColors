@@ -1,6 +1,6 @@
 # from Shapedetector import ShapeDetector
 from operator import sub
-from shapedetector import ShapeDetector
+# from shapedetector import ShapeDetector
 import imutils
 import cv2
 import os
@@ -150,7 +150,7 @@ for file in files:
         # print(subfolder_path)
         for image in os.listdir(subfolder_path): 
         
-            # print(image)
+            print(image)
             image_number, ppm_value,sec,seconds,second = image.split(',')
             # print(image_number)
             image_path = os.path.join(IMAGE_DIRECTORY,file, subfolder, image)

@@ -130,7 +130,7 @@ def show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, color, thr
     print(dE2000)
     return dE76, dE2000
 
-IMAGE_DIRECTORY = 'ROI10min'
+IMAGE_DIRECTORY = 'ROI15min'
 
 ref_img= get_image(IMAGE_DIRECTORY+ '/0.jpg')[0]
 ref_img_bgr= get_image(IMAGE_DIRECTORY+ '/0.jpg')[1]
