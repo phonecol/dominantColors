@@ -61,7 +61,7 @@ def save_data(data):
 
 
 
-IMAGE_DIRECTORY = 'ROI15min'
+IMAGE_DIRECTORY = 'ROI5min'
 images , ppm_values = get_images_from_a_folder(IMAGE_DIRECTORY)
 
 
@@ -82,7 +82,7 @@ print(len(images))
 for i in range(len(images)):
 
     dc = DominantColors(images[i],images,clusters) #initialize the DominantColors class
-    dc.saveHistogram("Histograms/{}Histogram".format(i), True)
+    dc.saveHistogram("Histograms/{}Histogram".format(i), False)
 
     colors = dc.dominantColors()  #call the dominantColors function to get the dominant colors of the image using KMeans Algorithm
     print("Dominant Colors: ",colors)
@@ -159,6 +159,13 @@ ax1.plot(ppm_values,RGB_Means[:,2],color='blue', marker='o', linestyle='dashed')
 ax1.set_ylabel('Mean Pixel Intensity')
 ax1.set_xlabel('PPM Concentration')
 
+
+
+
+
+
+
+      
 labels = ppm_values_str
 # men_means = [20, 34, 30, 35, 27]
 # women_means = [25, 32, 34, 20, 25]
@@ -176,8 +183,7 @@ rects3 = ax2.bar(x + 2.5*width, RGB_Means[:,2], width, label='Blue',color='b')
 # Add some text for labels, title and custom x-axis tick labels, etc.
 ax2.set_ylabel('Mean Pixel Intensity')
 ax2.set_title("Mean RGB Pixel Intensity of Au-NP's")
-ax2.set_xticks(x)
-ax2.set_xticklabels(labels)
+      
 ax2.set_xlabel('PPM Concentration')
 ax2.legend()
 
@@ -193,34 +199,36 @@ plt.show()
 
 
 fig2, (ax21, ax22) = plt.subplots(2, 1)
-ax21.plot(ppm_values,HSV_Means[:,0],color='red', marker='o', linestyle='dashed')
-ax21.plot(ppm_values,HSV_Means[:,1],color='green', marker='o', linestyle='dashed')
-ax21.plot(ppm_values,HSV_Means[:,2],color='blue', marker='o', linestyle='dashed')
+ax21.plot(ppm_values,HSV_Means[:,0],color='red', marker='o', linestyle='dashed', label='Hue')
+ax21.plot(ppm_values,HSV_Means[:,1],color='green', marker='o', linestyle='dashed', label='Saturation')
+ax21.plot(ppm_values,HSV_Means[:,2],color='blue', marker='o', linestyle='dashed', label='Value')
 ax21.set_ylabel('Mean Pixel Intensity in HSV COLORSPACE')
 ax21.set_xlabel('PPM Concentration')
+ax21.legend()
 plt.show()
 
 
 fig3, (ax31, ax32) = plt.subplots(2, 1)
-ax31.plot(ppm_values,Lab_Means[:,0],color='red', marker='o', linestyle='dashed')
-ax31.plot(ppm_values,Lab_Means[:,1],color='green', marker='o', linestyle='dashed')
-ax31.plot(ppm_values,Lab_Means[:,2],color='blue', marker='o', linestyle='dashed')
+ax31.plot(ppm_values,Lab_Means[:,0],color='red', marker='o', linestyle='dashed', label='L')
+ax31.plot(ppm_values,Lab_Means[:,1],color='green', marker='o', linestyle='dashed', label='a')
+ax31.plot(ppm_values,Lab_Means[:,2],color='blue', marker='o', linestyle='dashed', label='b')
 ax31.set_ylabel('Mean Pixel Intensity in Lab COLORSPACE')
 ax31.set_xlabel('PPM Concentration')
+ax31.legend()
 plt.show()
 
-scatter_color = RGB_Means/255
-print(scatter_color)
-area = 500  # 0 to 15 point radii
+# scatter_color = RGB_Means/255
+# print(scatter_color)
+# area = 500  # 0 to 15 point radii
 
-plt.scatter(ppm_values, RGB_Means[:,0], s=area, c=scatter_color, alpha=0.5)
+# plt.scatter(ppm_values, RGB_Means[:,0], s=area, c=scatter_color, alpha=0.5)
 
-plt.show()
+# plt.show()
 
 
-scatter_hsv = HSV_Means[:,0]
-print(scatter_hsv)
-area = 500  # 0 to 15 point radii
+# scatter_hsv = HSV_Means[:,0]
+# print(scatter_hsv)
+# area = 500  # 0 to 15 point radii
 
-plt.scatter(ppm_values, HSV_Means[:,0], s=area, c=scatter_hsv, alpha=0.5)
-plt.show()
+# plt.scatter(ppm_values, HSV_Means[:,0], s=area, c=scatter_hsv, alpha=0.5)
+# plt.show()

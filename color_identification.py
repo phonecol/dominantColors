@@ -126,18 +126,19 @@ def show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, color, thr
     dE76 = np.ravel(dE76)
     dE2000 = np.ravel(dE2000)
 
-    print(dE76)
-    print(dE2000)
+    # print(dE76)
+    # print(dE2000)
     return dE76, dE2000
 
 IMAGE_DIRECTORY = 'ROI15min'
 
-ref_img= get_image(IMAGE_DIRECTORY+ '/0.jpg')[0]
-ref_img_bgr= get_image(IMAGE_DIRECTORY+ '/0.jpg')[1]
-ref_color = get_colors(get_image(IMAGE_DIRECTORY+ '/0.jpg')[0],1,True)
+ref_img= get_image(IMAGE_DIRECTORY+ '/1.jpg')[0]
+ref_img_bgr= get_image(IMAGE_DIRECTORY+ '/1.jpg')[1]
+ref_color = get_colors(get_image(IMAGE_DIRECTORY+ '/1.jpg')[0],1,True)
 print(ref_color)
 
-
+ppm_concentration_str = ["WFP-AuNP",  "Deionised Water", "0.01 ppm", "0.1 ppm" , "0.5 ppm", "1 ppm", "5 ppm", "10 ppm", "20 ppm", "30 ppm"]
+ppm_concentration_int = [-1,0,0.01, 0.1,0.5,1,5,10,20,30]
 COLORS = {
     'GREEN': [0,128,0],
     'BLUE': [0,0,128],
@@ -168,8 +169,8 @@ for file in os.listdir(IMAGE_DIRECTORY):
 
 combined = [r[0] for r in combined[:10]]
 mostColorMontage = build_montages(combined, (150,150), (10,1))
-cv2.imshow("Most Colorful",mostColorMontage[0])
-cv2.waitKey(0)
+# cv2.imshow("Most Colorful",mostColorMontage[0])
+# cv2.waitKey(0)
 print(files)
 # print(images)
 
@@ -179,11 +180,103 @@ print(files)
 #     plt.imshow(images[i])
 #     plt.show()
 
-plt.figure(figsize = (20, 10))
+# plt.figure(figsize = (20, 10))
 print('REF')
 dE76, dE2000 =show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, COLORS['REF'], 10, 1)
 print(dE76, dE2000)
 
+
+
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+# make a little extra space between the subplots
+fig.subplots_adjust(hspace=0.5)
+
+ax1.set_title('Color Difference deltaE_76 at 15 minutes Detection Time')
+
+ax1.plot(ppm_concentration_int, dE76, color='green', marker='o', linestyle='dashed')
+ax1.set_xticks(ppm_concentration_int)
+# ax1.set_yticklabels(dE76)
+ax1.set_ylabel('deltaE 76')
+ax1.set_xlabel('Cyanide Concentration (PPM)')
+
+
+
+ax2.set_title('Color Difference deltaE_76 at 15 minutes Detection Time')
+width = 0.2
+rects1=ax2.bar(ppm_concentration_int,dE76,width,color='blue')
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+
+ax2.legend()
+
+ax2.bar_label(rects1, padding=3)
+
+
+# ax2.plot(ppm_concentration_int, dE76, color='blue', marker='o', linestyle='dashed')
+ax2.set_xticks(ppm_concentration_int)
+# ax2.set_yticklabels(dE2000)
+ax2.set_ylabel('deltaE 76')
+ax2.set_xlabel('Cyanide Concentration (PPM)')
+
+
+
+ax3.set_title('Color Difference deltaE_76 at 15 minutes Detection Time')
+
+ax3.scatter(ppm_concentration_int, dE76, color='red', marker='+')
+ax3.set_xticks(ppm_concentration_int)
+# ax1.set_yticklabels(dE76)
+ax3.set_ylabel('deltaE 76')
+ax3.set_xlabel('Cyanide Concentration (PPM)')
+
+
+plt.show()
+
+
+
+
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+# make a little extra space between the subplots
+fig.subplots_adjust(hspace=0.5)
+
+ax1.set_title('Color Difference deltaE_2000 at 15 minutes Detection Time')
+
+ax1.plot(ppm_concentration_int, dE76, color='green', marker='o', linestyle='dashed')
+ax1.set_xticks(ppm_concentration_int)
+# ax1.set_yticklabels(dE76)
+ax1.set_ylabel('deltaE 2000')
+ax1.set_xlabel('Cyanide Concentration (PPM)')
+
+
+
+ax2.set_title('Color Difference deltaE_2000 at 15 minutes Detection Time')
+width = 0.2
+rects2=ax2.bar(ppm_concentration_int,dE76,width, color='blue')
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+
+ax2.legend()
+
+ax2.bar_label(rects2, padding=3)
+
+
+# ax2.plot(ppm_concentration_int, dE76, color='blue', marker='o', linestyle='dashed')
+ax2.set_xticks(ppm_concentration_int)
+# ax2.set_yticklabels(dE2000)
+ax2.set_ylabel('deltaE 2000')
+ax2.set_xlabel('Cyanide Concentration (PPM)')
+
+
+
+ax3.set_title('Color Difference deltaE_2000 at 15 minutes Detection Time')
+
+ax3.scatter(ppm_concentration_int, dE2000, color='red', marker='+')
+ax3.set_xticks(ppm_concentration_int)
+# ax1.set_yticklabels(dE76)
+ax3.set_ylabel('deltaE 2000')
+ax3.set_xlabel('Cyanide Concentration (PPM)')
+
+
+plt.show()
 
 
 # print('REF1')
