@@ -112,7 +112,7 @@ def get_images_from_a_folder(path):
 ppm_concentration_str = ["WFP-AuNP",  "Deionised Water", "0.01 ppm", "0.1 ppm" , "0.5 ppm", "1 ppm", "5 ppm", "10 ppm", "20 ppm", "30 ppm"]
 ppm_concentration_int = [-1,0,0.01, 0.1,0.5,1,5,10,20,30]
 
-min = str(15)
+min = str(10)
 IMAGE_DIRECTORY = 'ROI'+min+'min'
 images ,hsvs,gray, ppm_values = get_images_from_a_folder(IMAGE_DIRECTORY)
 

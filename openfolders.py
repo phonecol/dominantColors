@@ -12,9 +12,12 @@ import math
 # Inked90ppmafter2min__LI
 
 #load image
-IMAGE_DIRECTORY = 'captured_images'
+
+# IMAGE_DIRECTORY = os.path.join('captured_images1', 'optimizationA')
+IMAGE_DIRECTORY = 'captured_images1/optimizationA'
 
 #initialize the list of images, and its filenames
+image_no = '01'
 images = []
 ppm_values = []
 subfolders = []
@@ -37,10 +40,11 @@ def get_image(image_path):
     return image
 
 
-def get_circles(images):
+def get_circles(images,image_number, ppm_values):
 
-    for i in range(len(images)):
-        img = images[i]
+    for j in range(len(images)):
+        print('image: ',j)
+        img = images[j]
         scale_percent = 100 # percent of original size
         width = int(img.shape[1] * scale_percent / 100)
         height = int(img.shape[0] * scale_percent / 100)
@@ -64,13 +68,13 @@ def get_circles(images):
             minDist=300, 
             param1=40, 
             param2=23,
-            minRadius=45, 
+            minRadius=40, 
             maxRadius=60
         )
-        print(circles)
-        print("asd")
-        print(circles[0,:,0])
-        print("asd")
+        # print(circles)
+        # print("asd")
+        # print(circles[0,:,0])
+        # print("asd")
         NUM_ROWS = 3
         #sort circles
         circles = np.round(circles[0, :]).astype("int")
@@ -110,9 +114,9 @@ def get_circles(images):
         for co, i in enumerate(circles, start=1):
             # draw the outer circle
             print(co)
-            print(i[0])
-            print(i[1])
-            print(i[2])
+            # print(i[0])
+            # print(i[1])
+            # print(i[2])
             
             cv2.putText(masked,str(co),(int(i[0]+60),int(i[1])+60),cv2.FONT_HERSHEY_SIMPLEX, 1.5,(255,255,255),2)
             cv2.circle(masked,(int(i[0]),int(i[1])),int(i[2]),(0,255,0),2)
@@ -126,8 +130,11 @@ def get_circles(images):
 
             roi=masked[origin_y:origin_y+2*radius,origin_x:origin_x+2*radius]
             roi2=masked[origin_y+20:origin_y+2*radius-20,origin_x+20:origin_x+2*radius-20]
-            cv2.imwrite("ROI/"+str(co)+','+ppm_value + '.jpg', roi)
-            cv2.imwrite("roi2/"+str(co)+','+ppm_value+ '.jpg', roi2)
+            roi_path = "ROI\\" +image_number+'\\'+str(co)+','+str(ppm_values[j]) + '.jpg'
+            print('roi_path',roi_path)
+            cv2.imwrite(roi_path, roi)
+            cv2.imwrite("ROI2\\"+image_number+'\\'+str(co)+','+str(ppm_values[j])+ '.jpg', roi2)
+            cv2.waitKey(0)
 
             # roi=cimg[y:y+h,x:x+w]
         # print the number of circles detected
@@ -135,8 +142,8 @@ def get_circles(images):
         # save the image, convert to BGR to save with proper colors
         # cv2.imwrite("coins_circles_detected.png", cimg)
         # show the image
-        plt.imshow(masked)
-        plt.show()
+        # plt.imshow(masked)
+        #plt.show()
 
 
 
@@ -150,15 +157,16 @@ for file in files:
         # print(subfolder_path)
         for image in os.listdir(subfolder_path): 
         
-            print(image)
+            print('image_filename',image)
             image_number, ppm_value,sec,seconds,second = image.split(',')
             # print(image_number)
             image_path = os.path.join(IMAGE_DIRECTORY,file, subfolder, image)
             # print(image_path)
-            if image_number == '1':
-            # ppm_value, image_type, = image.split('.')
+            if image_number == image_no:
+            
                 images.append(get_image(image_path))
                 image_paths.append(image_path)
+                ppm_values.append(ppm_value)
                 print(image_number)
                 print(image)
                 print("diri2")
@@ -166,7 +174,11 @@ for file in files:
         
     # subfolders.append(subfolder)
 
-get_circles(images)
+print('filenames',image_paths)
+print('ppm_values',ppm_values)
+print("lezgoo")
+print('image number: ',image_no)
+get_circles(images,image_no,ppm_values)
 # print(imagesss)
 print("lezgoo")
 print(image_paths) 

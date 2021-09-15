@@ -110,8 +110,8 @@ def show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, color, thr
         dE2000.append(dE_2000)
 
     merged = tuple(zip(images_bgr,dE76,dE2000))
-    merged = [r[0] for r in merged[:10]]
-    deltaE_Montage = build_montages(merged, (150,150), (10,1))
+    merged = [r[0] for r in merged[:100]]
+    deltaE_Montage = build_montages(merged, (150,150), (10,10))
     cv2.imshow("deltaE",deltaE_Montage[0])
     cv2.imshow("Reference Image", ref_img_bgr)
     cv2.waitKey(0)
@@ -130,15 +130,15 @@ def show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, color, thr
     # print(dE2000)
     return dE76, dE2000
 
-IMAGE_DIRECTORY = 'ROI15min'
+IMAGE_DIRECTORY = 'ROI/01'
 
-ref_img= get_image(IMAGE_DIRECTORY+ '/1.jpg')[0]
-ref_img_bgr= get_image(IMAGE_DIRECTORY+ '/1.jpg')[1]
-ref_color = get_colors(get_image(IMAGE_DIRECTORY+ '/1.jpg')[0],1,True)
+ref_img= get_image(IMAGE_DIRECTORY+ '/1,0ppm.jpg')[0]
+ref_img_bgr= get_image(IMAGE_DIRECTORY+ '/1,0ppm.jpg')[1]
+ref_color = get_colors(get_image(IMAGE_DIRECTORY+ '/1,0ppm.jpg')[0],1,True)
 print(ref_color)
 
-ppm_concentration_str = ["WFP-AuNP",  "Deionised Water", "0.01 ppm", "0.1 ppm" , "0.5 ppm", "1 ppm", "5 ppm", "10 ppm", "20 ppm", "30 ppm"]
-ppm_concentration_int = [-1,0,0.01, 0.1,0.5,1,5,10,20,30]
+# ppm_concentration_str = ["WFP-AuNP",  "Deionised Water", "0.01 ppm", "0.1 ppm" , "0.5 ppm", "1 ppm", "5 ppm", "10 ppm", "20 ppm", "30 ppm"]
+# ppm_concentration_int = [-1,0,0.01, 0.1,0.5,1,5,10,20,30]
 COLORS = {
     'GREEN': [0,128,0],
     'BLUE': [0,0,128],
@@ -153,8 +153,13 @@ images = []
 combined =[]
 images_bgr = []
 files = []
+cyanide_concentrations = []
 for file in os.listdir(IMAGE_DIRECTORY):
     print(file)
+    papersensor_number, cyanide_concentrationjpg = file.split(',')
+    print(cyanide_concentrationjpg)
+    cyanide_concentration, jpg = cyanide_concentrationjpg.split('.')
+    cyanide_concentrations.append(cyanide_concentration)
     files.append(file)
     if not file.startswith('.'):
         image,image_bgr = get_image(os.path.join(IMAGE_DIRECTORY, file))
@@ -167,8 +172,8 @@ for file in os.listdir(IMAGE_DIRECTORY):
 
         combined.append((combined_image, file))
 
-combined = [r[0] for r in combined[:10]]
-mostColorMontage = build_montages(combined, (150,150), (10,1))
+combined = [r[0] for r in combined[:100]]
+mostColorMontage = build_montages(combined, (150,150), (10,10))
 # cv2.imshow("Most Colorful",mostColorMontage[0])
 # cv2.waitKey(0)
 print(files)
@@ -182,7 +187,7 @@ print(files)
 
 # plt.figure(figsize = (20, 10))
 print('REF')
-dE76, dE2000 =show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, COLORS['REF'], 10, 1)
+dE76, dE2000 =show_selected_images(images,images_bgr,ref_img,ref_img_bgr,files, COLORS['REF'], 100, 1)
 print(dE76, dE2000)
 
 
@@ -193,8 +198,8 @@ fig.subplots_adjust(hspace=0.5)
 
 ax1.set_title('Color Difference deltaE_76 at 15 minutes Detection Time')
 
-ax1.plot(ppm_concentration_int, dE76, color='green', marker='o', linestyle='dashed')
-ax1.set_xticks(ppm_concentration_int)
+ax1.plot(cyanide_concentrations, dE76, color='green', marker='o', linestyle='dashed')
+ax1.set_xticks(cyanide_concentrations)
 # ax1.set_yticklabels(dE76)
 ax1.set_ylabel('deltaE 76')
 ax1.set_xlabel('Cyanide Concentration (PPM)')
@@ -203,7 +208,7 @@ ax1.set_xlabel('Cyanide Concentration (PPM)')
 
 ax2.set_title('Color Difference deltaE_76 at 15 minutes Detection Time')
 width = 0.2
-rects1=ax2.bar(ppm_concentration_int,dE76,width,color='blue')
+rects1=ax2.bar(cyanide_concentrations,dE76,width,color='blue')
 
 # Add some text for labels, title and custom x-axis tick labels, etc.
 
@@ -213,7 +218,7 @@ ax2.bar_label(rects1, padding=3)
 
 
 # ax2.plot(ppm_concentration_int, dE76, color='blue', marker='o', linestyle='dashed')
-ax2.set_xticks(ppm_concentration_int)
+ax2.set_xticks(cyanide_concentrations)
 # ax2.set_yticklabels(dE2000)
 ax2.set_ylabel('deltaE 76')
 ax2.set_xlabel('Cyanide Concentration (PPM)')
@@ -222,8 +227,8 @@ ax2.set_xlabel('Cyanide Concentration (PPM)')
 
 ax3.set_title('Color Difference deltaE_76 at 15 minutes Detection Time')
 
-ax3.scatter(ppm_concentration_int, dE76, color='red', marker='+')
-ax3.set_xticks(ppm_concentration_int)
+ax3.scatter(cyanide_concentrations, dE76, color='red', marker='+')
+ax3.set_xticks(cyanide_concentrations)
 # ax1.set_yticklabels(dE76)
 ax3.set_ylabel('deltaE 76')
 ax3.set_xlabel('Cyanide Concentration (PPM)')
@@ -240,8 +245,8 @@ fig.subplots_adjust(hspace=0.5)
 
 ax1.set_title('Color Difference deltaE_2000 at 15 minutes Detection Time')
 
-ax1.plot(ppm_concentration_int, dE76, color='green', marker='o', linestyle='dashed')
-ax1.set_xticks(ppm_concentration_int)
+ax1.plot(cyanide_concentrations, dE2000, color='green', marker='o', linestyle='dashed')
+ax1.set_xticks(cyanide_concentrations)
 # ax1.set_yticklabels(dE76)
 ax1.set_ylabel('deltaE 2000')
 ax1.set_xlabel('Cyanide Concentration (PPM)')
@@ -250,7 +255,7 @@ ax1.set_xlabel('Cyanide Concentration (PPM)')
 
 ax2.set_title('Color Difference deltaE_2000 at 15 minutes Detection Time')
 width = 0.2
-rects2=ax2.bar(ppm_concentration_int,dE76,width, color='blue')
+rects2=ax2.bar(cyanide_concentrations, dE2000,width, color='blue')
 
 # Add some text for labels, title and custom x-axis tick labels, etc.
 
@@ -260,7 +265,7 @@ ax2.bar_label(rects2, padding=3)
 
 
 # ax2.plot(ppm_concentration_int, dE76, color='blue', marker='o', linestyle='dashed')
-ax2.set_xticks(ppm_concentration_int)
+ax2.set_xticks(cyanide_concentrations)
 # ax2.set_yticklabels(dE2000)
 ax2.set_ylabel('deltaE 2000')
 ax2.set_xlabel('Cyanide Concentration (PPM)')
@@ -269,8 +274,8 @@ ax2.set_xlabel('Cyanide Concentration (PPM)')
 
 ax3.set_title('Color Difference deltaE_2000 at 15 minutes Detection Time')
 
-ax3.scatter(ppm_concentration_int, dE2000, color='red', marker='+')
-ax3.set_xticks(ppm_concentration_int)
+ax3.scatter(cyanide_concentrations, dE2000, color='red', marker='+')
+# ax3.set_xticks(ppm_concentration_int)
 # ax1.set_yticklabels(dE76)
 ax3.set_ylabel('deltaE 2000')
 ax3.set_xlabel('Cyanide Concentration (PPM)')
